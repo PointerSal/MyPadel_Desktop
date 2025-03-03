@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.ReservationsPage"
+             xmlns:Loader="clr-namespace:MyPadelDesktopApp.Controls"
+             xmlns:model="clr-namespace:MyPadelDesktopApp.Models"
+             xmlns:viewmodels="clr-namespace:MyPadelDesktopApp.ViewModel"
+             x:DataType="viewmodels:ReservationsViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DefaultBackground}"
+             x:Name="this">
+
+    <Grid>
+        <ScrollView>
+            <Grid RowDefinitions="Auto,*">
+                <Grid ColumnDefinitions="Auto,Auto,*,*,Auto" ColumnSpacing="10" BackgroundColor="{StaticResource SecondaryBackgroundColor}" Padding="10,5">
+                    <Image Source="back_arrow.png" Style="{StaticResource BackButtonStyle}">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Grid.Column="1" Text="Prenotazioni" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                    <Button Grid.Column="2" Text="━ Elimina campo" Style="{StaticResource RedDeleteButtonStyle}" Command="{Binding DeleteFieldCommand}" IsVisible="{Binding IsEdit}" HorizontalOptions="EndAndExpand"/>
+                    <Button Grid.Column="3" Text="Salva modifiche" Style="{StaticResource GreenButtonStyle}" Command="{Binding SaveFieldCommand}" HorizontalOptions="StartAndExpand"/>
+                    <Label Grid.Column="4" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                </Grid>
+
+                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="1.5*,*,*" RowSpacing="10" ColumnSpacing="120" Padding="40">
+                    <StackLayout>
+                        <Entry Text="{Binding Courts.sportsName}" Placeholder="Field name" Style="{StaticResource EntryStyle}"/>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding NameError}" IsVisible="{Binding HasNameError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+                    <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Entry Text="{Binding Courts.fieldName}" Placeholder="Tipo di campo" Style="{StaticResource EntryStyle}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                        <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldTypeError}" IsVisible="{Binding HasFieldTypeError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </Grid>
+                    <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Entry Text="{Binding Courts.terrainType}" Placeholder="Tipo Terriano" Style="{StaticResource EntryStyle}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                        <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding TerrainTypeError}" IsVisible="{Binding HasTerrainTypeError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </Grid>
+                    <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                        <Entry Text="{Binding Courts.fieldCapacity}" Placeholder="Capacità sul campo" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
+                        <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                        <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldCapacityError}" IsVisible="{Binding HasFieldCapacityError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </Grid>
+
+                    <StackLayout Grid.Column="1">
+                        <Grid ColumnDefinitions="Auto,20,Auto">
+                            <Label Text="Durata dello slot 1 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1" Text="{Binding Courts.slot1Duration}" Keyboard="Numeric" Placeholder="" Style="{StaticResource EntryStyle}" WidthRequest="1" MinimumWidthRequest="20" HorizontalOptions="EndAndExpand"/>
+                            <Label Grid.Column="2" Text=" min" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding Duration1Error}" IsVisible="{Binding HasDuration1Error}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout Grid.Row="1" Grid.Column="1">
+                        <Grid ColumnDefinitions="Auto,20,Auto">
+                            <Label Text="Durata dello slot 2 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1" Text="{Binding Courts.slot2Duration}" Keyboard="Numeric" Placeholder="" Style="{StaticResource EntryStyle}" WidthRequest="1" MinimumWidthRequest="20" HorizontalOptions="EndAndExpand"/>
+                            <Label Grid.Column="2" Text=" min" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding Duration2Error}" IsVisible="{Binding HasDuration2Error}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout Grid.Row="2" Grid.Column="1">
+                        <Grid ColumnDefinitions="Auto,20,Auto">
+                            <Label Text="Durata dello slot 3 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1" Text="{Binding Courts.slot3Duration}" Keyboard="Numeric" Placeholder="" Style="{StaticResource EntryStyle}" WidthRequest="1" MinimumWidthRequest="20" HorizontalOptions="EndAndExpand"/>
+                            <Label Grid.Column="2" Text=" min" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding Duration3Error}" IsVisible="{Binding HasDuration3Error}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+
+                    <StackLayout Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,20,Auto">
+                            <Label Text="Prezzo dello slot 1 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1" Text="{Binding Courts.slot1Price}" Keyboard="Numeric" Placeholder="" Style="{StaticResource EntryStyle}" WidthRequest="1" MinimumWidthRequest="20" HorizontalOptions="EndAndExpand"/>
+                            <Label Grid.Column="2" Text="€" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding Price1Error}" IsVisible="{Binding HasPrice1Error}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout Grid.Column="2" Grid.Row="1">
+                        <Grid ColumnDefinitions="Auto,20,Auto">
+                            <Label Text="Prezzo dello slot 2 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1" Text="{Binding Courts.slot2Price}" Keyboard="Numeric" Placeholder="" Style="{StaticResource EntryStyle}" WidthRequest="1" MinimumWidthRequest="20" HorizontalOptions="EndAndExpand"/>
+                            <Label Grid.Column="2" Text="€" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding Price2Error}" IsVisible="{Binding HasPrice2Error}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+                    <StackLayout Grid.Column="2" Grid.Row="2">
+                        <Grid ColumnDefinitions="Auto,20,Auto">
+                            <Label Text="Prezzo dello slot 3 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,10,0"/>
+                            <Entry Grid.Column="1" Text="{Binding Courts.slot3Price}" Keyboard="Numeric" Placeholder="" Style="{StaticResource EntryStyle}" WidthRequest="1" MinimumWidthRequest="20" HorizontalOptions="EndAndExpand"/>
+                            <Label Grid.Column="2" Text="€" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                        <Label Text="{Binding Price3Error}" IsVisible="{Binding HasPrice3Error}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                    </StackLayout>
+                    <HorizontalStackLayout Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" Spacing="10">
+                        <Border Style="{StaticResource VerySmallTransparentBoxBlackBorder}">
+                            <Label Text="X" Style="{StaticResource DefaultBlackLabelHorizontalCenter}" IsVisible="{Binding CanBooked}"/>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BookingClickedCommand}"/>
+                            </Border.GestureRecognizers>
+                        </Border>
+                        <Label Text="Può essere prenotato" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </HorizontalStackLayout>
+                    <StackLayout Grid.Row="4" Grid.Column="0" Margin="0,25,0,0">
+                        <Label Text="Orari di apertura" Style="{StaticResource DefaultBlackUnderlineBoldLabelHorizontalStart}"/>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,10,0,5">
+                            <Label Text="{Binding OpeningHours}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                            <Image Grid.Column="1" Source="edit_field.png" Style="{StaticResource SmallImage}"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenOpeningHoursCommand}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                    </StackLayout>
+                </Grid>
+            </Grid>
+        </ScrollView>
+        <Loader:ActivityIndicator IsVisible="{Binding IsBusy}"/>
+    </Grid>
+</ContentPage>

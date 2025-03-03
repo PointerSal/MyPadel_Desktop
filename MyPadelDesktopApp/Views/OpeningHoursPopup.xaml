@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.OpeningHoursPopup"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+             BackgroundColor="{StaticResource LightBackgroundColor}">
+
+    <Frame BackgroundColor="{StaticResource DefaultBackground}" Padding="0" CornerRadius="7" VerticalOptions="CenterAndExpand" HorizontalOptions="FillAndExpand" Margin="100,0">
+        <VerticalStackLayout>
+            <Border BackgroundColor="{StaticResource WhiteBackground}" Stroke="{StaticResource TransparentBackground}" Padding="10">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="Quando siete aperti?" Style="{StaticResource DefaultBlackBoldLabelHorizontalStart}"/>
+                    <Button Grid.Column="1" Text="Avanti" Style="{StaticResource OrangeButtonStyle}"/>
+                </Grid>
+            </Border>
+            <BoxView Style="{StaticResource GrayBoxViewStyle}"/>
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto" Margin="10" RowSpacing="15">
+                <Label Grid.ColumnSpan="2" Text="Orari di apertura" Style="{StaticResource DefaultBlackBoldLabelHorizontalStart}"/>
+                <Label Grid.Row="1" Text="Lunedi-Domenica" Style="{StaticResource DefaultBlackLabelHorizontalStart}" TextColor="{StaticResource SecondaryBackgroundColor}"/>
+                <Label Grid.Row="1" Grid.Column="1">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding Time,Source={x:Reference StartTimePicker}, StringFormat='{0:hh\\:mm}'}" TextColor="{StaticResource SecondaryBackgroundColor}"/>
+                            <Span Text="-"/>
+                            <Span Text="{Binding Time,Source={x:Reference EndTimePicker}, StringFormat='{0:hh\\:mm}'}" TextColor="{StaticResource SecondaryBackgroundColor}"/>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </Grid>
+
+            <Border Style="{StaticResource GrayGeneralBorder}" Margin="10" Padding="10">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,*" RowSpacing="20">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+                        <CheckBox x:Name="ChkLun" Grid.Column="0" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="1" Text="Lun" Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,30,0"/>
+
+                        <CheckBox x:Name="ChkMar" Grid.Column="2" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="3" Text="Mar" Style="{StaticResource DefaultBlackLabelHorizontalStart}" Margin="0,0,30,0"/>
+
+                        <CheckBox x:Name="ChkMer" Grid.Column="4" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="5" Text="Mer" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+
+                        <CheckBox x:Name="ChkGio" Grid.Column="0" Grid.Row="1" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="1" Grid.Row="1" Text="Gio" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+
+                        <CheckBox x:Name="ChkVen" Grid.Column="2" Grid.Row="1" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="3" Grid.Row="1" Text="Ven" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+
+                        <CheckBox x:Name="ChkSab" Grid.Column="4" Grid.Row="1" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="5" Grid.Row="1" Text="Sab" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+
+                        <CheckBox x:Name="ChkDom" Grid.Column="0" Grid.Row="2" Style="{StaticResource DefaultCheckbox}"/>
+                        <Label Grid.Column="1" Grid.Row="2" Text="Dom" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    </Grid>
+
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1" Spacing="10">
+                        <HorizontalStackLayout Spacing="0" VerticalOptions="Start" HorizontalOptions="EndAndExpand">
+                            <Border Style="{StaticResource GrayGeneralBorder}">
+                                <Grid>
+                                    <Label Text="{Binding Time,Source={x:Reference StartTimePicker}, StringFormat='{0:hh\\:mm}'}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}" TextColor="{StaticResource SecondaryBackgroundColor}"/>
+                                    <TimePicker x:Name="StartTimePicker" Format="HH:mm" Opacity="0" WidthRequest="10"/>
+                                </Grid>
+                            </Border>
+                            <Label Text=" - " VerticalOptions="Center"/>
+                            <Border Style="{StaticResource GrayGeneralBorder}">
+                                <Grid>
+                                    <Label Text="{Binding Time,Source={x:Reference EndTimePicker}, StringFormat='{0:hh\\:mm}'}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}" TextColor="{StaticResource SecondaryBackgroundColor}"/>
+                                    <TimePicker x:Name="EndTimePicker" Format="HH:mm" Opacity="0" WidthRequest="10"/>
+                                </Grid>
+                            </Border>
+                        </HorizontalStackLayout>
+                        <Label x:Name="TimeErrorLabel" Style="{StaticResource UnboldSmallRedErrorLabelStyle}" IsVisible="False" HorizontalOptions="EndAndExpand"/>
+                    </VerticalStackLayout>
+
+                    <HorizontalStackLayout Grid.Row="1" Spacing="10">
+                        <Button Text="Salva" Style="{StaticResource GreenButtonStyle}" Clicked="OnSaveClicked"/>
+                        <Label Text="Cancella" Style="{StaticResource DefaultBlackUnderlineBoldLabelHorizontalStart}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCancelClicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </Grid>
+            </Border>
+        </VerticalStackLayout>
+    </Frame>
+</mopups:PopupPage>

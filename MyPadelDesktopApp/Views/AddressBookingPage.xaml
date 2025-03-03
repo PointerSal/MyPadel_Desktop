@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.AddressBookingPage"
+             xmlns:segmentedControl="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:Loader="clr-namespace:MyPadelDesktopApp.Controls"
+             xmlns:model="clr-namespace:MyPadelDesktopApp.Models"
+             xmlns:viewmodels="clr-namespace:MyPadelDesktopApp.ViewModel"
+             x:DataType="viewmodels:AddressBookingViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DefaultBackground}"
+             x:Name="this">
+
+    <Grid>
+        <Grid RowDefinitions="Auto,Auto,*">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="10" BackgroundColor="{StaticResource SecondaryBackgroundColor}" Padding="10,5">
+                <Image Source="back_arrow.png" Style="{StaticResource BackButtonStyle}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Grid.Column="1" Text="Rubrica" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                <Button Grid.Column="2" Text="━ Elimina cliente" Style="{StaticResource RedDeleteButtonStyle}" Command="{Binding DeleteUserCommand}"/>
+                <Label Grid.Column="3" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+            </Grid>
+
+            <segmentedControl:SfSegmentedControl Grid.Row="1" SelectedIndex="0" ItemsSource="{Binding ItemList}" SelectionChanged="SfSegmentedControl_SelectionChanged" Stroke="{StaticResource DefaultBorder}" SegmentBackground="{StaticResource DefaultBackground}" CornerRadius="1" VisibleSegmentsCount="3" HorizontalOptions="FillAndExpand" Margin="-5">
+                <segmentedControl:SfSegmentedControl.TextStyle>
+                    <segmentedControl:SegmentTextStyle TextColor="{StaticResource DefaultTextColors}"/>
+                </segmentedControl:SfSegmentedControl.TextStyle>
+                <segmentedControl:SfSegmentedControl.SelectionIndicatorSettings>
+                    <segmentedControl:SelectionIndicatorSettings TextColor="{StaticResource WhiteTextColors}" Background="{StaticResource PrimaryBackgroundColor}"/>
+                </segmentedControl:SfSegmentedControl.SelectionIndicatorSettings>
+            </segmentedControl:SfSegmentedControl>
+
+            <!--For personal information tab-->
+            <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*" RowSpacing="40" ColumnSpacing="120" Padding="40" IsVisible="False">
+                <!--<StackLayout>
+                <Entry Text="{Binding CustomerInfo.ClientName}" Placeholder="Client name" Style="{StaticResource EntryStyle}"/>
+                <BoxView Style="{StaticResource BoxViewStyle}"/>
+                <Label Text="{Binding ClientNameError}" IsVisible="{Binding HasClientNameError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="1">
+                <Entry Text="{Binding CustomerInfo.CustomerSurname}" Placeholder="Customer Surname" Style="{StaticResource EntryStyle}"/>
+                <BoxView Style="{StaticResource BoxViewStyle}"/>
+                <Label Text="{Binding SurnameError}" IsVisible="{Binding HasSurnameError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="2">
+                <DatePicker Date="{Binding ExpiryDate}" Style="{StaticResource GeneralDatePicker}"/>
+                <BoxView Style="{StaticResource BoxViewStyle}"/>
+                <Label Text="{Binding FitCardError}" IsVisible="{Binding HasFitCardError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="3">
+                <Label Text="Notes" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                <Border Style="{StaticResource SmallWhiteBoxBlackBorder}">
+                    <Editor Text="{Binding CustomerInfo.Notes}" Style="{StaticResource WhiteEditorStyle}" VerticalOptions="StartAndExpand" Margin="0,0"/>
+                </Border>
+                <Label Text="{Binding NotesError}" IsVisible="{Binding HasNotesError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+
+            <StackLayout Grid.Column="1">
+                <Entry Text="{Binding CustomerInfo.Email}" Placeholder="Email" Keyboard="Email" Style="{StaticResource EntryStyle}"/>
+                <BoxView Style="{StaticResource BoxViewStyle}"/>
+                <Label Text="{Binding EmailError}" IsVisible="{Binding HasEmailError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="1" Grid.Column="1">
+                <HorizontalStackLayout>
+                    <Label Text="+39 " Style="{StaticResource DefaultBlackLabelHorizontalStart}" VerticalOptions="CenterAndExpand" Padding="0,0,0,3"/>
+                    <Entry Text="{Binding CustomerInfo.Telephone}" MaxLength="10" Placeholder="" Keyboard="Numeric" VerticalOptions="CenterAndExpand" Style="{StaticResource EntryStyle}"/>
+                </HorizontalStackLayout>
+                <BoxView Style="{StaticResource BoxViewStyle}"/>
+                <Label Text="{Binding PhoneError}" IsVisible="{Binding HasPhoneError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="2" Grid.Column="1">
+                <Entry Text="{Binding CustomerInfo.PlayerType}" Placeholder="Player type (padel or tennis)" Style="{StaticResource EntryStyle}"/>
+                <BoxView Style="{StaticResource BoxViewStyle}"/>
+                <Label Text="{Binding PlayerTypeError}" IsVisible="{Binding HasPlayerTypeError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+            </StackLayout>
+            <StackLayout Grid.Row="3" Grid.Column="1" Spacing="25">
+                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                    <Picker Title="Tag (curtain)" ItemsSource="{Binding TagList}" SelectedItem="{Binding CustomerInfo.Tag}" Style="{StaticResource PickerStyle}"/>
+                    <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
+                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding TagError}" IsVisible="{Binding HasTagError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                </Grid>
+                <HorizontalStackLayout Spacing="10">
+                    <Border Style="{StaticResource VerySmallTransparentBoxBlackBorder}">
+                        <Label Text="X" Style="{StaticResource DefaultBlackLabelHorizontalCenter}" IsVisible="{Binding MarketingInformationEnabled}"/>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AccountInfoClickedCommand}"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Label Text="Marketing Information" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                </HorizontalStackLayout>
+            </StackLayout>-->
+
+                <StackLayout>
+                    <Label Text="{Binding UsersData.clientName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <BoxView Style="{StaticResource BoxViewStyle}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="1">
+                    <Label Text="{Binding UsersData.customerSurname, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <BoxView Style="{StaticResource BoxViewStyle}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="2">
+                    <Label Text="{Binding UsersData.fitCardExpiryDate, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <BoxView Style="{StaticResource BoxViewStyle}"/>
+                </StackLayout>
+
+                <StackLayout Grid.Column="1">
+                    <Label Text="{Binding UsersData.email, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <BoxView Style="{StaticResource BoxViewStyle}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="1" Grid.Column="1">
+                    <Label Text="{Binding UsersData.telephone, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <BoxView Style="{StaticResource BoxViewStyle}"/>
+                </StackLayout>
+                <StackLayout Grid.Row="2" Grid.Column="1">
+                    <Label Text="{Binding UsersData.playerType, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <BoxView Style="{StaticResource BoxViewStyle}"/>
+                </StackLayout>
+                <Grid.Triggers>
+                    <DataTrigger TargetType="Grid" Binding="{Binding SelectedItem}" Value="DATI PERSONALI">
+                        <Setter Property="IsVisible" Value="True"/>
+                    </DataTrigger>
+                </Grid.Triggers>
+            </Grid>
+
+            <Grid Grid.Row="2" RowDefinitions="Auto,*" IsVisible="False">
+                <Grid ColumnDefinitions="*,*,*,*,*,*" ColumnSpacing="-2" HeightRequest="40">
+                    <Border Style="{StaticResource GeneralBorder}">
+                        <Label Text="Date" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Field" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Ora di inizio" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="3" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Durata" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="4" Style="{StaticResource GeneralBorder}">
+                        <Label Text="$$" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="5" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Metodo di pagamento" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                </Grid>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding HistoryList}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:History">
+                            <Grid ColumnDefinitions="*,*,*,*,*,*" ColumnSpacing="-2" Padding="-0.5" HeightRequest="40">
+                                <Border Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding date, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding field, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding startingHour, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="3" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding duration, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="4" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding amount, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="5" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding paymentMethod, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Grid.Row="1" Text="Nessuna cronologia trovata" Style="{StaticResource DefaultBlackBoldLabelHorizontalCenter}" IsVisible="{Binding IsEmpty}"/>
+                <Grid.Triggers>
+                    <DataTrigger TargetType="Grid" Binding="{Binding SelectedItem}" Value="STORIA">
+                        <Setter Property="IsVisible" Value="True"/>
+                    </DataTrigger>
+                </Grid.Triggers>
+            </Grid>
+
+            <Grid Grid.Row="2" Padding="20" IsVisible="False">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="{Binding UserStatistics.totalBookings,StringFormat='Prenotazioni totali: {0:F0}'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <Label Text="{Binding UserStatistics.averageMonthlyBookings,StringFormat='Prenotazioni mensili medie: {0:F0}'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <Label Text="{Binding UserStatistics.favoriteField,StringFormat='Campo preferito: {0:F0}'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <Label Text="{Binding UserStatistics.cancelledBookings,StringFormat='Prenotazioni annullate: {0:F0}'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                    <Label Text="{Binding UserStatistics.lifetimeValueInEuros,StringFormat='Valore della vita del cliente: €{0:F0}/mese'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                </VerticalStackLayout>
+                <Grid.Triggers>
+                    <DataTrigger TargetType="Grid" Binding="{Binding SelectedItem}" Value="STATISTICHE">
+                        <Setter Property="IsVisible" Value="True"/>
+                    </DataTrigger>
+                </Grid.Triggers>
+            </Grid>
+
+        </Grid>
+        <Loader:ActivityIndicator IsVisible="{Binding IsBusy}"/>
+    </Grid>
+</ContentPage>

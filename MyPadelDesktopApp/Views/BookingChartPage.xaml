@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.BookingChartPage"
+             xmlns:Loader="clr-namespace:MyPadelDesktopApp.Controls"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:navigationDrawer="clr-namespace:Syncfusion.Maui.Toolkit.NavigationDrawer;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:model="clr-namespace:MyPadelDesktopApp.Models"
+             xmlns:viewmodels="clr-namespace:MyPadelDesktopApp.ViewModel"
+             x:DataType="viewmodels:BookingChartViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DefaultBackground}"
+             x:Name="this">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <navigationDrawer:SfNavigationDrawer x:Name="navigationDrawer">
+        <navigationDrawer:SfNavigationDrawer.DrawerSettings>
+            <navigationDrawer:DrawerSettings DrawerWidth="450" EnableSwipeGesture="False" Position="Right">
+                <navigationDrawer:DrawerSettings.DrawerContentView>
+                    <Grid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="10" BackgroundColor="{StaticResource DefaultBackground}" Padding="40,10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Stato Prenotazione" Style="{StaticResource LargeDefaultBlackBoldLabelHorizontalStart}" FontSize="23"/>
+                            <Image Grid.Column="1" Source="close.png" Aspect="AspectFit" HeightRequest="30" WidthRequest="30">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCloseDrawer"/>
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Grid>
+                        <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand" Spacing="5" IsVisible="{Binding IsAlreadyExist}">
+                            <Border Style="{StaticResource MenuBoxBorder}">
+                                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <HorizontalStackLayout>
+                                        <Label Grid.Row="0" Text="{Binding SelectedBooking.sportType}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                                        <Label Grid.Row="0" Text=" - " Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                                        <Label Grid.Row="0" Text="{Binding SelectedBooking.firstName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                                        <Label Grid.Row="0" Text=" " Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                                        <Label Grid.Row="0" Text="{Binding SelectedBooking.lastName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                                    </HorizontalStackLayout>
+                                    <Label Grid.Row="1" Text="{Binding SelectedBooking.fieldName}" Style="{StaticResource DefaultWhiteUnBoldLabelHorizontalStart}"/>
+                                    <Image Grid.RowSpan="2" Source="tennis.png" Style="{StaticResource SmallImage}" HorizontalOptions="EndAndExpand"/>
+                                    <Grid Grid.Row="2" RowDefinitions="Auto,Auto" ColumnDefinitions="*,*,*,*" Margin="0,20,0,0">
+                                        <Label Grid.Row="0" Grid.Column="0" Text="Data" Style="{StaticResource TooMicroUnBoldAlginCenter}"/>
+                                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding SelectedBooking.date, StringFormat='{0:dd MMM}'}" Style="{StaticResource SmallLabelStyle}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+
+                                        <Label Grid.Row="0" Grid.Column="1" Text="Ora" Style="{StaticResource TooMicroUnBoldAlginCenter}"/>
+                                        <HorizontalStackLayout Grid.Row="1" Grid.Column="1">
+                                            <Label Text="{Binding SelectedBooking.date, StringFormat='{0:HH:mm}'}" Style="{StaticResource SmallLabelStyle}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+                                            <Label Text=" - " Style="{StaticResource SmallLabelStyle}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+                                            <Label Text="{Binding SelectedBooking.endTime, StringFormat='{0:HH:mm}'}" Style="{StaticResource SmallLabelStyle}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+                                        </HorizontalStackLayout>
+
+                                        <Label Grid.Row="0" Grid.Column="2" Text="Durata" Style="{StaticResource TooMicroUnBoldAlginCenter}"/>
+                                        <Label Grid.Row="1" Grid.Column="2" Text="{Binding SelectedBooking.duration,StringFormat='{0} min'}" Style="{StaticResource SmallLabelStyle}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+
+                                        <Label Grid.Row="0" Grid.Column="3" Text="Prezzo" Style="{StaticResource TooMicroUnBoldAlginCenter}"/>
+                                        <Label Grid.Row="1" Grid.Column="3" Text="{Binding SelectedBooking.amount,StringFormat='{0:F0}€'}" Style="{StaticResource SmallLabelStyle}" HorizontalTextAlignment="Center" HorizontalOptions="CenterAndExpand"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Row="2" Style="{StaticResource NoMarginMenuBoxBorder}">
+                                <StackLayout Spacing="5">
+                                    <Label Text="Metodo di pagamento:" Style="{StaticResource SmallBoldLabelStyle}"/>
+                                    <Grid>
+                                        <StackLayout>
+                                            <Label Text="{Binding SelectedBooking.paymentMethod,StringFormat='• {0:F2}'}" Style="{StaticResource SmallLabelStyle}" Padding="0,5"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </Border>
+
+                            <Border Grid.Row="3" Style="{StaticResource NoMarginMenuBoxBorder}">
+                                <StackLayout Spacing="5">
+                                    <Label Text="Stato prenotazione:" Style="{StaticResource SmallBoldLabelStyle}"/>
+                                    <Grid>
+                                        <StackLayout>
+                                            <Label Text="{Binding SelectedBooking.status}" Style="{StaticResource SmallLabelStyle}" Padding="0,5"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </Border>
+                        </StackLayout>
+
+                        <ScrollView Grid.Row="1"  IsVisible="{Binding IsAlreadyExist,Converter={StaticResource InvertedBoolConverter}}">
+                            <StackLayout>
+                                <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Picker Title="Seleziona Nome campo" ItemsSource="{Binding FieldList}" SelectedItem="{Binding NewBooking.fieldName}" SelectedIndexChanged="OnFieldNameSelected" Style="{StaticResource PickerStyle}"/>
+                                    <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldListError}" IsVisible="{Binding HasFieldListError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Picker Title="Seleziona Tipo di campo" ItemsSource="{Binding FieldTypeList}" SelectedItem="{Binding FieldType}" Style="{StaticResource PickerStyle}"/>
+                                    <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldTypeListError}" IsVisible="{Binding HasFieldTypeListError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding SelectedTime}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                                    <TimePicker Time="{Binding SelectedTime}" Opacity="0"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding DurationError}" IsVisible="{Binding HasDurationError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding SelectedDate, StringFormat='{0:yyyy-MM-dd}'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                                    <DatePicker Date="{Binding SelectedDate}" Opacity="0"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding DateError}" IsVisible="{Binding HasDateError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Entry Text="{Binding NewBooking.duration}" Placeholder="Tipo di campo" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding DurationError}" IsVisible="{Binding HasDurationError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Picker Title="Email" ItemsSource="{Binding UsersEmailList}" SelectedItem="{Binding Email}" Style="{StaticResource PickerStyle}"/>
+                                    <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding EmailError}" IsVisible="{Binding HasEmailError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Entry Text="{Binding NewBooking.amount}" Placeholder="Quantità" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding AmountError}" IsVisible="{Binding HasAmountError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid> 
+                                <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Picker Title="Seleziona il metodo di pagamento" SelectedItem="{Binding NewBooking.paymentMethod}" Style="{StaticResource PickerStyle}">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Metodo di pagamento</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                    <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding PaymentError}" IsVisible="{Binding HasPaymentError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                            </StackLayout>
+                        </ScrollView>
+
+                        <Button Grid.Row="3" Text="Prenota Campo" Style="{StaticResource TransparentButtonStyle}" VerticalOptions="EndAndExpand" Clicked="ReserveBooking" IsVisible="{Binding IsAlreadyExist,Converter={StaticResource InvertedBoolConverter}}"/>
+                        <Button Grid.Row="2" Text="Scarica Ricevuta" Style="{StaticResource TransparentButtonStyle}" VerticalOptions="EndAndExpand" IsVisible="{Binding IsAlreadyExist}"/>
+                        <Button Grid.Row="3" Text="Annulla Prenotazione" Style="{StaticResource RedButtonStyle}" Clicked="CancelReservation" VerticalOptions="EndAndExpand" IsVisible="{Binding IsAlreadyExist}"/>
+                    </Grid>
+                </navigationDrawer:DrawerSettings.DrawerContentView>
+            </navigationDrawer:DrawerSettings>
+        </navigationDrawer:SfNavigationDrawer.DrawerSettings>
+        <navigationDrawer:SfNavigationDrawer.ContentView>
+            <Grid>
+                <Grid RowDefinitions="Auto,*">
+                    <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto" ColumnSpacing="10" BackgroundColor="{StaticResource SecondaryBackgroundColor}" Padding="10,0">
+                        <Image Source="back_arrow.png" Style="{StaticResource BackButtonStyle}">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label Grid.Column="1" Text="Prenotazioni" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                        <Button Grid.Column="2" ImageSource="white_setting.png" Padding="10,5" Text="Configurazione campi" Style="{StaticResource BlackButtonStyle}" Command="{Binding FieldsConfigurationCommand}" Margin="30,0,0,0"/>
+                        <HorizontalStackLayout Grid.Column="3" Spacing="10" HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
+                            <Border Style="{StaticResource BlackBorder}" VerticalOptions="CenterAndExpand">
+                                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="10,5">
+                                    <Image Source="arrow_right.png" RotationY="180" Style="{StaticResource VerySmallImage}">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnBackDateClicked"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                    <Image Grid.Column="1" Source="arrow_right.png" Style="{StaticResource VerySmallImage}">
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnNextDateClicked"/>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </Grid>
+                            </Border>
+                            <Grid>
+                                <Label Text="{Binding CurrentSelectedDate, StringFormat='{0:dd,MMMM yyyy}'}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                                <DatePicker Opacity="0" Date="{Binding CurrentSelectedDate,Mode=TwoWay}" DateSelected="DatePicker_DateSelected"/>
+                            </Grid>
+                        </HorizontalStackLayout>
+                        <Button Grid.Column="4" Text="+ Aggiungi prenotazione" Style="{StaticResource GreenButtonStyle}" Clicked="AddNewBookingClicked" Margin="0,0,30,0"/>
+                        <Label Grid.Column="5" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                    </Grid>
+                    <ScrollView Grid.Row="1" Orientation="Both" BackgroundColor="{StaticResource DefaultBackground}">
+                        <Grid x:Name="ContentGrid"/>
+                    </ScrollView>
+                </Grid>
+                <Loader:ActivityIndicator IsVisible="{Binding IsBusy}"/>
+            </Grid>
+        </navigationDrawer:SfNavigationDrawer.ContentView>
+    </navigationDrawer:SfNavigationDrawer>
+
+</ContentPage>

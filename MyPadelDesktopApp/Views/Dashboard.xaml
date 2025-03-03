@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.Dashboard"
+             xmlns:viewmodels="clr-namespace:MyPadelDesktopApp.ViewModel"
+             x:DataType="viewmodels:DashboardViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DefaultBackground}"
+             x:Name="this">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10" BackgroundColor="{StaticResource SecondaryBackgroundColor}" Padding="10,5">
+            <Label Grid.Column="1" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+        </Grid>
+
+        <Grid Grid.Row="1" RowDefinitions="*,*" ColumnDefinitions="*,*">
+            <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <ImageButton Source="contact.png" Style="{StaticResource BlueImageButton}" Command="{Binding NavigateToPageCommand}" CommandParameter="AddressBookingHomePage"/>
+                <Label Text="Rubrica" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <ImageButton Source="tennis_ball.png" Style="{StaticResource BlueImageButton}" Command="{Binding NavigateToPageCommand}" CommandParameter="BookingChartPage"/>
+                <Label Text="Prenotazioni" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+            </StackLayout>
+
+            <StackLayout Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <ImageButton Source="chart.png" Style="{StaticResource BlueImageButton}" Command="{Binding NavigateToPageCommand}" CommandParameter="StatisticsPage"/>
+                <Label Text="Statistiche" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+            </StackLayout>
+
+            <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">
+                <ImageButton Source="settings.png" Style="{StaticResource BlueImageButton}" Command="{Binding NavigateToPageCommand}" CommandParameter="SettingPage"/>
+                <Label Text="Impostazioni" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+            </StackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

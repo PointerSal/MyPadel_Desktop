@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.AddressBookingHomePage"
+             xmlns:Loader="clr-namespace:MyPadelDesktopApp.Controls"
+             xmlns:model="clr-namespace:MyPadelDesktopApp.Models"
+             xmlns:viewmodels="clr-namespace:MyPadelDesktopApp.ViewModel"
+             x:DataType="viewmodels:AddressBookingHomeViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DefaultBackground}"
+             x:Name="this">
+
+    <Grid>
+        <Grid RowDefinitions="Auto,Auto,*">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="10" BackgroundColor="{StaticResource SecondaryBackgroundColor}" Padding="10,5">
+                <Image Source="back_arrow.png" Style="{StaticResource BackButtonStyle}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Grid.Column="1" Text="Rubrica" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                <Button Grid.Column="2" Text="━ Aggiungi nuovo" Style="{StaticResource GreenButtonStyle}"/>
+                <Label Grid.Column="3" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+            </Grid>
+
+            <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*" ColumnSpacing="-2" HeightRequest="40">
+                <Border Style="{StaticResource GeneralBorder}">
+                    <Label Text="Nome di battesimo" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
+                    <Label Text="Cognome" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
+                    <Label Text="Data di scadenza dell'Associazione FIT" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource GeneralBorder}">
+                    <Label Text="Data di scadenza del certificato medico" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                </Border>
+                <Border Grid.Column="4" Style="{StaticResource GeneralBorder}">
+                    <Label Text="Modifica utenti" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                </Border>
+            </Grid>
+            <CollectionView Grid.Row="2" ItemsSource="{Binding UserList}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:UsersData">
+                        <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="-2" Padding="-0.5" HeightRequest="40">
+                            <Border Style="{StaticResource GeneralBorder}">
+                                <Label Text="{Binding clientName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                            </Border>
+                            <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
+                                <Label Text="{Binding customerSurname, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                            </Border>
+                            <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
+                                <Label Text="{Binding fitCardExpiryDate, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                            </Border>
+                            <Border Grid.Column="3" Style="{StaticResource GeneralBorder}">
+                                <Label Text="{Binding medicalCertificateExpiryDate, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                            </Border>
+                            <Border Grid.Column="4" Style="{StaticResource GeneralBorder}">
+                                <Label Text="Modificare" Style="{StaticResource DefaultBlackLabelHorizontalCenter}">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference this},Path=BindingContext.EditCommand}" CommandParameter="{Binding .}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label Grid.Row="2" Text="Nessun utente trovato" Style="{StaticResource DefaultBlackBoldLabelHorizontalCenter}" IsVisible="{Binding IsEmpty}"/>
+        </Grid>
+        <Loader:ActivityIndicator IsVisible="{Binding IsBusy}"/>
+    </Grid>
+</ContentPage>

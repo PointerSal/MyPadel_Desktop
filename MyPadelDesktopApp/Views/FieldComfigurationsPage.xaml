@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MyPadelDesktopApp.Views.FieldComfigurationsPage"
+             xmlns:Loader="clr-namespace:MyPadelDesktopApp.Controls"
+             xmlns:model="clr-namespace:MyPadelDesktopApp.Models"
+             xmlns:viewmodels="clr-namespace:MyPadelDesktopApp.ViewModel"
+             x:DataType="viewmodels:FieldConfigurationsViewModel"
+             Shell.TabBarIsVisible="False"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource DefaultBackground}"
+             x:Name="this">
+
+    <Grid>
+        <Grid RowDefinitions="Auto,*">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" ColumnSpacing="10" BackgroundColor="{StaticResource SecondaryBackgroundColor}" Padding="10,5">
+                <Image Source="back_arrow.png" Style="{StaticResource BackButtonStyle}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Label Grid.Column="1" Text="Configurazione della prenotazione" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+                <Button Grid.Column="2" Text="+ Aggiungi nuovo" Style="{StaticResource GreenButtonStyle}" Command="{Binding AddNewCommand}"/>
+                <Label Grid.Column="3" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
+            </Grid>
+
+            <Grid Grid.Row="1" RowDefinitions="Auto,*">
+                <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="-2" HeightRequest="40">
+                    <Border Style="{StaticResource GeneralBorder}">
+                        <Label Text="Nome" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Sport" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Tipo" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="3" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Orari di apertura" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                    <Border Grid.Column="4" Style="{StaticResource GeneralBorder}">
+                        <Label Text="Modifica tribunali" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                    </Border>
+                </Grid>
+                <CollectionView Grid.Row="1" ItemsSource="{Binding Bookings}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Booking">
+                            <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="-2" Padding="-0.5" HeightRequest="40">
+                                <Border Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding fieldName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding sportsName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding terrainType, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="3" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="{Binding openingHours, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                </Border>
+                                <Border Grid.Column="4" Style="{StaticResource GeneralBorder}">
+                                    <Label Text="Modificare" Style="{StaticResource DefaultBlackLabelHorizontalCenter}">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={x:Reference this},Path=BindingContext.EditCommand}" CommandParameter="{Binding .}"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Label Grid.Row="1" Text="Nessun tribunale trovato" Style="{StaticResource DefaultBlackBoldLabelHorizontalCenter}" IsVisible="{Binding IsEmpty}"/>
+            </Grid>
+        </Grid>
+        <Loader:ActivityIndicator IsVisible="{Binding IsBusy}"/>
+    </Grid>
+</ContentPage>
