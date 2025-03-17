@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic.FileIO;
 using MyPadelDesktopApp.Helpers;
 using MyPadelDesktopApp.Models;
 using MyPadelDesktopApp.Services.DesktopBookingServices;
@@ -46,7 +47,10 @@ namespace MyPadelDesktopApp.ViewModel
         private ObservableCollection<string> _fieldList = new();
         
         [ObservableProperty]
-        private ObservableCollection<string> _usersEmailList = new();
+        private ObservableCollection<int> _durationList = new();
+        
+        [ObservableProperty]
+        private ObservableCollection<string> _usersCellsList = new();
 
         [ObservableProperty]
         private ObservableCollection<string> _fieldTypeList = new();
@@ -64,13 +68,22 @@ namespace MyPadelDesktopApp.ViewModel
         private string _fieldType;
         
         [ObservableProperty]
-        private string _email;
+        private string _cell;
         
         [ObservableProperty]
-        private string _emailError;
+        private string _cellError;
 
         [ObservableProperty]
-        private bool _hasEmailError;
+        private bool _hasCellError;
+        
+        [ObservableProperty]
+        private string _notes;
+        
+        [ObservableProperty]
+        private string _notesError;
+
+        [ObservableProperty]
+        private bool _hasNotesError;
 
         [ObservableProperty]
         private DateTime _selectedDate = DateTime.Today;
@@ -126,6 +139,9 @@ namespace MyPadelDesktopApp.ViewModel
         [ObservableProperty]
         private bool hasTimeError;
 
+        [ObservableProperty]
+        public DateTime _minSelectableDate = DateTime.Today;
+
         #endregion
 
         #region Commands
@@ -138,22 +154,26 @@ namespace MyPadelDesktopApp.ViewModel
                 IsBusy = true;
                 Validate();
 
-                if (!HasFieldListError && !HasFieldTypeListError && !HasDurationError && !HasAmountError && !HasPaymentError && !HasEmailError)
+                if (!HasPaymentError && !HasNotesError && !HasCellError)
                 {
-                    var NewTime = SelectedTime.ToString(@"hh\:mm"); 
+                    var NewTime = SelectedDate.TimeOfDay.ToString(@"hh\:mm"); 
                     var NewDateString = SelectedDate.ToString("yyyy-MM-dd") + $"T{NewTime}:00.000Z";
-                    var FieldId = AllCourts.FirstOrDefault(e => e.fieldName.Equals(FieldType, StringComparison.OrdinalIgnoreCase))?.fieldType;
+                    var SelectedFields = AllCourts.FirstOrDefault(e => e.fieldName.Equals(FieldType, StringComparison.OrdinalIgnoreCase));
+                    var FieldId = SelectedFields?.fieldType;
+                    NewBooking.amount = SelectedFields.slot1Duration == NewBooking.duration ? SelectedFields.slot1Price : (SelectedFields.slot2Duration == NewBooking.duration ? SelectedFields.slot2Price : SelectedFields.slot3Price);
                     var booking = new
                     {
-                        sportType = NewBooking.fieldName,
+                        sportType = SelectedFields.sportsName,
                         date = NewDateString,
                         NewBooking.duration,
                         timeSlot = NewTime != null ? NewTime : "00:00",
-                        fieldId = FieldId ?? "UnknownField",
+                        fieldId = FieldId ?? "0",
                         NewBooking.paymentMethod,
                         NewBooking.amount,
-                        email = Email ?? "unknown@example.com" 
+                        phoneNumber = Cell,
+                        notes = Notes,
                     };
+
                     var response = await _desktopBookingService.AddBookings(booking);
                     if (response != null && response.code != null && response.code.Equals("0000"))
                     {
@@ -176,6 +196,17 @@ namespace MyPadelDesktopApp.ViewModel
         {
             try
             {
+                if (SelectedBooking.endTime.HasValue && (SelectedBooking.endTime.Value - DateTime.Now).TotalHours < 24)
+                {
+                    bool result = await Shell.Current.DisplayAlert(
+                                 "Avviso",
+                                 "La tua prenotazione verrà annullata ma il rimborso non sarà applicabile. Vuoi continuare?",
+                                 "Sì",
+                                 "No");
+                    if (!result)
+                        return false;
+                }
+
                 IsBusy = true;
                 var response = await _desktopBookingService.CancelBooking(SelectedBooking.id ?? 0);
                 if (response != null && response.code != null && response.code.Equals("0000"))
@@ -218,20 +249,29 @@ namespace MyPadelDesktopApp.ViewModel
         #endregion
 
         #region Methods
-
-        public async void GetAllUsers()
+        public async Task GetAllUsers()
         {
             try
             {
+                if (UsersCellsList != null && UsersCellsList.Count > 0)
+                    return;
+
+                IsBusy = true;
                 var response = await _desktopClientService.GetAllUsers();
                 if (response != null && response.code != null && response.code.Equals("0000"))
-                    UsersEmailList = new ObservableCollection<string>((JsonSerializer.Deserialize<List<UsersData>>(response.data.ToString())).Select(s=>s.email).ToList());
+                    UsersCellsList = new ObservableCollection<string>(
+    JsonSerializer.Deserialize<List<UsersData>>(response.data.ToString())
+    .Select(s => s.cell)
+    .Distinct()
+    .ToList()
+);
                 else if (response != null && response.code != null)
                     await Shell.Current.DisplayAlert("Errore", response.message, "OK");
                 else
                     await Shell.Current.DisplayAlert("Errore", "Qualcosa è andato storto", "OK");
             }
             catch { }
+            IsBusy = false;
         }
         public async Task GetAllCourts()
         {
@@ -276,19 +316,32 @@ namespace MyPadelDesktopApp.ViewModel
         {
             try
             {
-                FieldTypeList = new ObservableCollection<string>(AllCourts.Where(e => e.sportsName.Equals(NewBooking.fieldName)).Select(s => s.fieldName).ToList());
+                //FieldTypeList = new ObservableCollection<string>(AllCourts.Where(e => e.sportsName.Equals(NewBooking.fieldName)).Select(s => s.fieldName).ToList());
+                //FieldType = FieldTypeList.FirstOrDefault();
+                //AddDurationList();
+            }
+            catch { }
+        }
+        
+        public void AddDurationList()
+        {
+            try
+            {
+                var SelectedCourt = AllCourts.FirstOrDefault(e => e.fieldName.Equals(FieldType));
+                DurationList = new ObservableCollection<int> { SelectedCourt.slot1Duration ??0, SelectedCourt.slot2Duration ?? 0, SelectedCourt.slot3Duration ?? 0 };
             }
             catch { }
         }
 
         public void Validate()
         {
+            (HasNotesError, NotesError) = FieldValidations.IsFieldNotEmpty(Notes, "Le note sono obbligatorie.");
             (HasFieldListError, FieldListError) = FieldValidations.IsFieldNotEmpty(NewBooking.fieldName, "Il nome del campo è obbligatorio.");
             (HasFieldTypeListError, FieldTypeListError) = FieldValidations.IsFieldNotEmpty(FieldType, "Il tipo di campo è obbligatorio.");
             (HasDurationError, DurationError) = FieldValidations.IsNumericAndPositive(NewBooking.duration.ToString(), "La durata deve essere un numero positivo.");
-            (HasAmountError, AmountError) = FieldValidations.IsNumericAndPositive(NewBooking.amount.ToString(), "La quantità deve essere un numero positivo.");
+            //(HasAmountError, AmountError) = FieldValidations.IsNumericAndPositive(NewBooking.amount.ToString(), "La quantità deve essere un numero positivo.");
             (HasPaymentError, PaymentError) = FieldValidations.IsFieldNotEmpty(NewBooking.paymentMethod, "Il metodo di pagamento è obbligatorio.");
-            (HasEmailError, EmailError) = FieldValidations.IsEmailValid(Email);
+            (HasCellError, CellError) = FieldValidations.IsFieldNotEmpty(Cell, "Il numero di telefono è obbligatorio.");
 
             if (SelectedTime == TimeSpan.Zero)
             {

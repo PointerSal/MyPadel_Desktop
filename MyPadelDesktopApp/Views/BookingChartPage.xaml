@@ -89,14 +89,14 @@
 
                         <ScrollView Grid.Row="1"  IsVisible="{Binding IsAlreadyExist,Converter={StaticResource InvertedBoolConverter}}">
                             <StackLayout>
-                                <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                <!--<Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                                     <Picker Title="Seleziona Nome campo" ItemsSource="{Binding FieldList}" SelectedItem="{Binding NewBooking.fieldName}" SelectedIndexChanged="OnFieldNameSelected" Style="{StaticResource PickerStyle}"/>
                                     <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                                     <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldListError}" IsVisible="{Binding HasFieldListError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
                                 </Grid>
                                 <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
-                                    <Picker Title="Seleziona Tipo di campo" ItemsSource="{Binding FieldTypeList}" SelectedItem="{Binding FieldType}" Style="{StaticResource PickerStyle}"/>
+                                    <Picker Title="Seleziona Tipo di campo" ItemsSource="{Binding FieldTypeList}" SelectedItem="{Binding FieldType}" SelectedIndexChanged="OnFieldTypeSelected" Style="{StaticResource PickerStyle}"/>
                                     <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                                     <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldTypeListError}" IsVisible="{Binding HasFieldTypeListError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
@@ -109,26 +109,32 @@
                                 </Grid>
                                 <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                                     <Label Text="{Binding SelectedDate, StringFormat='{0:yyyy-MM-dd}'}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
-                                    <DatePicker Date="{Binding SelectedDate}" Opacity="0"/>
+                                    <DatePicker Date="{Binding SelectedDate}"  MinimumDate="{Binding MinSelectableDate}" Opacity="0"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                                     <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding DateError}" IsVisible="{Binding HasDateError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
-                                </Grid>
-                                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
-                                    <Entry Text="{Binding NewBooking.duration}" Placeholder="Tipo di campo" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
+                                </Grid>-->
+                                <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Picker Title="Seleziona Durata" ItemsSource="{Binding DurationList}" SelectedItem="{Binding NewBooking.duration}" Style="{StaticResource PickerStyle}"/>
+                                    <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                                     <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding DurationError}" IsVisible="{Binding HasDurationError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
                                 </Grid>
+                                <!--<Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                    <Entry Text="{Binding NewBooking.duration}" Placeholder="Tipo di campo" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
+                                    <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding DurationError}" IsVisible="{Binding HasDurationError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>-->
                                 <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
-                                    <Picker Title="Email" ItemsSource="{Binding UsersEmailList}" SelectedItem="{Binding Email}" Style="{StaticResource PickerStyle}"/>
+                                    <Picker Title="Numero di telefono" ItemsSource="{Binding UsersCellsList}" SelectedItem="{Binding Cell}" Style="{StaticResource PickerStyle}"/>
                                     <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
-                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding EmailError}" IsVisible="{Binding HasEmailError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding CellError}" IsVisible="{Binding HasCellError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
                                 </Grid>
-                                <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                                <!--<Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                                     <Entry Text="{Binding NewBooking.amount}" Placeholder="Quantità" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                                     <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding AmountError}" IsVisible="{Binding HasAmountError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
-                                </Grid> 
+                                </Grid>--> 
                                 <Grid Grid.Row="3" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                                     <Picker Title="Seleziona il metodo di pagamento" SelectedItem="{Binding NewBooking.paymentMethod}" Style="{StaticResource PickerStyle}">
                                         <Picker.ItemsSource>
@@ -140,6 +146,12 @@
                                     <Image Grid.Column="1" Source="dropdown.png" Style="{StaticResource SmallImage}"/>
                                     <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                                     <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding PaymentError}" IsVisible="{Binding HasPaymentError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto" Margin="0,10">
+                                    <Border Style="{StaticResource SmallWhiteBoxBlackBorder}">
+                                        <Editor Text="{Binding Notes}" Style="{StaticResource WhiteEditorStyle}" VerticalOptions="StartAndExpand" Margin="0,0"/>
+                                    </Border>
+                                    <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding NotesError}" IsVisible="{Binding HasNotesError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
                                 </Grid>
                             </StackLayout>
                         </ScrollView>
@@ -182,7 +194,7 @@
                                 <DatePicker Opacity="0" Date="{Binding CurrentSelectedDate,Mode=TwoWay}" DateSelected="DatePicker_DateSelected"/>
                             </Grid>
                         </HorizontalStackLayout>
-                        <Button Grid.Column="4" Text="+ Aggiungi prenotazione" Style="{StaticResource GreenButtonStyle}" Clicked="AddNewBookingClicked" Margin="0,0,30,0"/>
+                        <!--<Button Grid.Column="4" Text="+ Aggiungi prenotazione" Style="{StaticResource GreenButtonStyle}" Clicked="AddNewBookingClicked" Margin="0,0,30,0"/>-->
                         <Label Grid.Column="5" Text="{Binding OperatorName}" Style="{StaticResource DefaultWhiteBoldLabelHorizontalStart}"/>
                     </Grid>
                     <ScrollView Grid.Row="1" Orientation="Both" BackgroundColor="{StaticResource DefaultBackground}">

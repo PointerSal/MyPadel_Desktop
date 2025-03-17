@@ -146,7 +146,7 @@ namespace MyPadelDesktopApp.ViewModel
             try
             {
                 Validate();
-                if (!HasNameError && !HasFieldTypeError && !HasTerrainTypeError && !HasFieldCapacityError && !HasDuration1Error && !HasDuration2Error && !HasDuration3Error && !HasPrice1Error && !HasPrice2Error && !HasPrice3Error)
+                if (!HasNameError && !HasFieldTypeError && !HasDuration1Error && !HasDuration2Error && !HasDuration3Error && !HasPrice1Error && !HasPrice2Error && !HasPrice3Error)
                 {
                     object Court = null;
                     if (IsEdit)

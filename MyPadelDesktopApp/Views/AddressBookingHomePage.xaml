@@ -46,10 +46,10 @@
                     <DataTemplate x:DataType="model:UsersData">
                         <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="-2" Padding="-0.5" HeightRequest="40">
                             <Border Style="{StaticResource GeneralBorder}">
-                                <Label Text="{Binding clientName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                <Label Text="{Binding firstName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
                             </Border>
                             <Border Grid.Column="1" Style="{StaticResource GeneralBorder}">
-                                <Label Text="{Binding customerSurname, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
+                                <Label Text="{Binding lastName, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
                             </Border>
                             <Border Grid.Column="2" Style="{StaticResource GeneralBorder}">
                                 <Label Text="{Binding fitCardExpiryDate, Converter={StaticResource EmptyToNAConverter}}" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>

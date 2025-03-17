@@ -37,7 +37,7 @@
                         <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                         <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldTypeError}" IsVisible="{Binding HasFieldTypeError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
                     </Grid>
-                    <Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+                    <!--<Grid Grid.Row="2" RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
                         <Entry Text="{Binding Courts.terrainType}" Placeholder="Tipo Terriano" Style="{StaticResource EntryStyle}"/>
                         <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                         <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding TerrainTypeError}" IsVisible="{Binding HasTerrainTypeError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
@@ -46,7 +46,18 @@
                         <Entry Text="{Binding Courts.fieldCapacity}" Placeholder="Capacità sul campo" Keyboard="Numeric" Style="{StaticResource EntryStyle}"/>
                         <BoxView Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource BoxViewStyle}"/>
                         <Label Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FieldCapacityError}" IsVisible="{Binding HasFieldCapacityError}" Style="{StaticResource UnboldSmallRedErrorLabelStyle}"/>
-                    </Grid>
+                    </Grid>-->
+                    <StackLayout Grid.Row="2" Margin="0,25,0,0">
+                        <Label Text="Orari di apertura" Style="{StaticResource DefaultBlackUnderlineBoldLabelHorizontalStart}"/>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,10,0,5">
+                            <Label Text="{Binding OpeningHours}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
+                            <Image Grid.Column="1" Source="edit_field.png" Style="{StaticResource SmallImage}"/>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenOpeningHoursCommand}"/>
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                        <BoxView Style="{StaticResource BoxViewStyle}"/>
+                    </StackLayout>
 
                     <StackLayout Grid.Column="1">
                         <Grid ColumnDefinitions="Auto,20,Auto">
@@ -112,17 +123,7 @@
                         </Border>
                         <Label Text="Può essere prenotato" Style="{StaticResource DefaultBlackLabelHorizontalCenter}"/>
                     </HorizontalStackLayout>
-                    <StackLayout Grid.Row="4" Grid.Column="0" Margin="0,25,0,0">
-                        <Label Text="Orari di apertura" Style="{StaticResource DefaultBlackUnderlineBoldLabelHorizontalStart}"/>
-                        <Grid ColumnDefinitions="*,Auto" Margin="0,10,0,5">
-                            <Label Text="{Binding OpeningHours}" Style="{StaticResource DefaultBlackLabelHorizontalStart}"/>
-                            <Image Grid.Column="1" Source="edit_field.png" Style="{StaticResource SmallImage}"/>
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OpenOpeningHoursCommand}"/>
-                            </Grid.GestureRecognizers>
-                        </Grid>
-                        <BoxView Style="{StaticResource BoxViewStyle}"/>
-                    </StackLayout>
+                    
                 </Grid>
             </Grid>
         </ScrollView>

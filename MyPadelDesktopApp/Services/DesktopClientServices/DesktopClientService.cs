@@ -1,4 +1,5 @@
-﻿using MyPadelDesktopApp.Models.Responses;
+﻿using MyPadelDesktopApp.Models;
+using MyPadelDesktopApp.Models.Responses;
 using MyPadelDesktopApp.Services.HttpClientServices;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,14 @@ namespace MyPadelDesktopApp.Services.DesktopClientServices
         public async Task<GeneralResponse> CustomerStatistics(string email)
         {
             return await httpClientService.GetAsync("desktop-client/customer-statistics?email=" + email + "", false);
+        }
+        public async Task<GeneralResponse> UpdateClient(Object data)
+        {
+            return await httpClientService.PostAsync("desktop-client/update", data, false, false);
+        }
+        public async Task<GeneralResponse> MedicalCertificate(string email)
+        {
+            return await httpClientService.GetAsync("Picture/medical-certificate?email=" + email + "", false);
         }
     }
 }

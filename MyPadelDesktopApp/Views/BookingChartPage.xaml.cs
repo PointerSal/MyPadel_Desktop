@@ -210,15 +210,20 @@ public partial class BookingChartPage : ContentPage
         }
     }
 
-    private void OnGridCellTapped(int columnIndex, int rowIndex)
+    private async void OnGridCellTapped(int columnIndex, int rowIndex)
     {
+        string selectedField = Fields[columnIndex - 1];
+        DateTime selectedTime = _bookingChartViewModel.CurrentSelectedDate.Date.AddHours(rowIndex);
 
-        //string selectedField = Fields[columnIndex - 1];
-        //DateTime selectedTime = _bookingChartViewModel.CurrentSelectedDate.Date.AddHours(rowIndex);
-        //_bookingChartViewModel.SelectedCourt = selectedField;
-        //_bookingChartViewModel.SelectedTime = selectedTime;
-        //_bookingChartViewModel.IsAlreadyExist = false;
-        //navigationDrawer.ToggleDrawer();
+        if (DateTime.Now <= selectedTime)
+        {
+            _bookingChartViewModel.FieldType = selectedField;
+            _bookingChartViewModel.SelectedDate = selectedTime;
+            _bookingChartViewModel.AddDurationList();
+            _bookingChartViewModel.IsAlreadyExist = false;
+            await _bookingChartViewModel.GetAllUsers();
+            navigationDrawer.ToggleDrawer();
+        }
     }
     private void OnBookingTapped(BookedData booking)
     {
@@ -266,15 +271,20 @@ public partial class BookingChartPage : ContentPage
     }
     private void AddNewBookingClicked(object sender, EventArgs e)
     {
-        _bookingChartViewModel.IsAlreadyExist = false;
-        navigationDrawer.ToggleDrawer();
-        MainThread.BeginInvokeOnMainThread(() =>
-        {
-            _bookingChartViewModel.GetAllUsers();
-        });
+        //_bookingChartViewModel.IsAlreadyExist = false;
+        //navigationDrawer.ToggleDrawer();
+        //MainThread.BeginInvokeOnMainThread(() =>
+        //{
+        //    _bookingChartViewModel.GetAllUsers();
+        //});
     }
     private void OnFieldNameSelected(object sender, EventArgs e)
     {
         _bookingChartViewModel.AddFieldTypeList();
+    }
+    
+    private void OnFieldTypeSelected(object sender, EventArgs e)
+    {
+        _bookingChartViewModel.AddDurationList();
     }
 }
